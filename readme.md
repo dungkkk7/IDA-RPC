@@ -4,19 +4,44 @@ IDA Discord RPC is a plugin for IDA that displays your current activity as Disco
 
 ## Compatible
 
-- IDA HOME 9.0
+- IDA PRO/HOME 9.3 on Linux (Ubuntu x64)
 
-- IDA PRO 9.0
+## Build
+
+Requirements:
+
+- CMake 3.15+
+
+- C++17 compiler
+
+- IDA SDK 9.3 extracted locally
+
+### Linux (Ubuntu / IDA 9.3)
+
+```bash
+cmake -S . -B build -DIDASDK_PATH=/opt/ida-pro-9.3/ida-sdk
+cmake --build build -j"$(nproc)"
+```
+
+If auto-detection of the IDA SDK library fails, set it explicitly:
+
+```bash
+cmake -S . -B build \
+  -DIDASDK_PATH=/opt/ida-pro-9.3/ida-sdk \
+  -DIDASDK_LIB=/opt/ida-pro-9.3/libida.so
+```
+
+Output plugin: `build/ida_plugins/ida_discord_rpc.so`
 
 ## Installation
 
-To install the plugin, place the compiled `.dll` file into the following directory:
+Linux:
 
-```
-C:\Users\<YourUsername>\AppData\Roaming\Hex-Rays\IDA Pro\plugins
+```bash
+cp build/ida_plugins/ida_discord_rpc.so ~/.idapro/plugins/
 ```
 
-> Replace `<YourUsername>` with your actual Windows username.
+You can also copy it to `<IDA_INSTALL_DIR>/plugins`.
 
 After restarting IDA, the plugin will run in the background.
 It does not appear in the plugin menu, as it is designed to be invisible during normal use.

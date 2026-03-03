@@ -11,7 +11,14 @@
 
 extern idarpc::discord::RichPresence *rpc;
 
-static time_t start_time = time(nullptr);
+namespace {
+time_t start_time = time(nullptr);
+std::string cached_large_image_text;
+std::string cached_state;
+std::string cached_details;
+std::string cached_small_image_key;
+std::string cached_small_image_text;
+}
 
 std::string get_ida_version_string()
 {
@@ -33,20 +40,24 @@ namespace idarpc::discord_rpc_helper
         if (idarpc::idahelper::is_ida_home_version())
         {
             presence.largeImageKey = "ida_home";
-            std::string homeText = "IDA HOME " + get_ida_version_string();
-            presence.largeImageText = homeText.c_str();
+            cached_large_image_text = "IDA HOME " + get_ida_version_string();
         }
         else
         {
             presence.largeImageKey = "ida_pro";
-            std::string proText = "IDA PRO " + get_ida_version_string();
-            presence.largeImageText = proText.c_str();
+            cached_large_image_text = "IDA PRO " + get_ida_version_string();
         }
+        presence.largeImageText = cached_large_image_text.c_str();
 
-        presence.state = idahelper::get_filename();
-        presence.details = spec.details.c_str();
-        presence.smallImageKey = spec.small_image_key.c_str();
-        presence.smallImageText = spec.small_image_text.c_str();
+        cached_state = idahelper::get_filename();
+        cached_details = spec.details;
+        cached_small_image_key = spec.small_image_key;
+        cached_small_image_text = spec.small_image_text;
+
+        presence.state = cached_state.empty() ? nullptr : cached_state.c_str();
+        presence.details = cached_details.empty() ? nullptr : cached_details.c_str();
+        presence.smallImageKey = cached_small_image_key.empty() ? nullptr : cached_small_image_key.c_str();
+        presence.smallImageText = cached_small_image_text.empty() ? nullptr : cached_small_image_text.c_str();
 
         rpc->update_presence(presence);
     }

@@ -2,14 +2,15 @@
 
 #include <idp.hpp>
 #include <diskio.hpp>
+#include <cctype>
 
 #include "log/log.hpp"
 
-const char *idarpc::idahelper::get_filename()
+std::string idarpc::idahelper::get_filename()
 {
     char filename_buf[260] = {};
     get_root_filename(filename_buf, sizeof(filename_buf));
-    return filename_buf;
+    return std::string(filename_buf);
 }
 
 bool idarpc::idahelper::is_ida_home_version()

@@ -47,7 +47,7 @@ void ida_rpc_mod::disabled_events() {
 
     if (view_listener)
     {
-        unhook_event_listener(HT_UI, view_listener);
+        unhook_event_listener(HT_VIEW, view_listener);
         delete view_listener;
         view_listener = nullptr;
     }
